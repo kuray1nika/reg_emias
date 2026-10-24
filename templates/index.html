@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+{# Jinja2 template #}
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Здоровье везде</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+</head>
+<body>
+
+  <input type="radio" id="p-login" class="switch" name="screen" {% if active_screen == 'p-login' %}checked{% endif %}>
+  <input type="radio" id="p-register" class="switch" name="screen" {% if active_screen == 'p-register' %}checked{% endif %}>
+  <input type="radio" id="p-home" class="switch" name="screen" {% if active_screen == 'p-home' %}checked{% endif %}>
+  <input type="radio" id="p-book" class="switch" name="screen" {% if active_screen == 'p-book' %}checked{% endif %}>
+  <input type="radio" id="p-book-time" class="switch" name="screen" {% if active_screen == 'p-book-time' %}checked{% endif %}>
+  <input type="radio" id="p-book-done" class="switch" name="screen" {% if active_screen == 'p-book-done' %}checked{% endif %}>
+  <input type="radio" id="p-card" class="switch" name="screen" {% if active_screen == 'p-card' %}checked{% endif %}>
+  <input type="radio" id="p-refs" class="switch" name="screen" {% if active_screen == 'p-refs' %}checked{% endif %}>
+  <input type="radio" id="p-recepts" class="switch" name="screen" {% if active_screen == 'p-recepts' %}checked{% endif %}>
+  <input type="radio" id="p-doc" class="switch" name="screen" {% if active_screen == 'p-doc' %}checked{% endif %}>
+  <input type="radio" id="p-doc-patient" class="switch" name="screen" {% if active_screen == 'p-doc-patient' %}checked{% endif %}>
+
+  <header class="header">
+    <div class="logo">Здоровье <span>везде</span></div>
+
+    <nav class="nav nav-patient">
+      <label for="p-home">Главная</label>
+      <a href="/med_card" style="color: #666; font-size: 14px; text-decoration: none;">Медкарта</a>
+      <label for="p-refs">Направления</label>
+      <label for="p-recepts">Рецепты</label>
+    </nav>
+
+    <nav class="nav nav-doctor">
+      <label for="p-doc">Мои приёмы</label>
+    </nav>
+
+    <a href="/logout" class="btn-outline">Выйти</a>
+  </header>
+
+  <section class="screen s-login">
+  <div class="login-box">
+    <h1>Здоровье везде</h1>
+    <p class="sub">Войдите в личный кабинет</p>
+
+    <form action="/login" method="POST">
+      <div class="form-group">
+        <label>Почта</label>
+        <input type="text" name="login" class="login-input" placeholder="example@mail.ru" required>
+      </div>
+      <div class="form-group">
+        <label>Пароль</label>
+        <input type="password" name="password" class="login-input" placeholder="Введите пароль" required>
+      </div>
+      <button type="submit" class="btn-primary full-width">Войти</button>
+    </form>
+
+    <p class="auth-footer">
+      Нет аккаунта? <label for="p-register" class="link">Зарегистрироваться</label>
+    </p>
+  </div>
+</section>
+
+  <section class="screen s-register">
+  <div class="login-box">
+    <h1>Здоровье везде</h1>
+    <p class="sub">Создайте аккаунт пациента</p>
+
+    <form action="/register" method="POST">
+      <div class="form-group">
+        <label>Фамилия</label>
+        <input type="text" name="last_name" class="reg-input" placeholder="Смирнова" required>
+      </div>
+
+      <div class="form-group">
+        <label>Имя</label>
+        <input type="text" name="first_name" class="reg-input" placeholder="Анна" required>
+      </div>
+
+      <div class="form-group">
+        <label>Отчество (если есть)</label>
+        <input type="text" name="middle_name" class="reg-input" placeholder="Ивановна">
+      </div>
+
+      <div class="form-group">
+        <label>Дата рождения</label>
+        <input type="date" name="birth_date" class="reg-input" required>
+      </div>
+
+      <div class="form-group">
+        <label>Полис ОМС</label>
+        <input type="text" name="oms" class="reg-input" placeholder="4509 0000 0000 0000"
+               pattern="\d{4}\s?\d{4}\s?\d{4}\s?\d{4}"
+               title="16 цифр полиса ОМС" required>
+      </div>
+
+      <div class="form-group">
+        <label>Пол</label>
+        <select name="gender" class="reg-input" required>
+          <option value="" disabled selected>Выберите пол</option>
+          <option value="female">Женский</option>
+          <option value="male">Мужской</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Почта</label>
+        <input type="text" name="login" class="reg-input" placeholder="example@mail.ru"
+               pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+               title="Введите почту вида name@domain.ru" required>
+      </div>
+
+      <div class="form-group">
+        <label>Номер телефона</label>
+        <input type="tel" name="phone" class="reg-input" placeholder="+7XXXXXXXXXX"
+               pattern="\+7\d{10}"
+               title="Формат: +7 и 10 цифр, например +79990000000" required>
+      </div>
+
+      <div class="form-group">
+        <label>Придумайте пароль</label>
+        <input type="password" name="password" class="reg-input" placeholder="Не менее 8 символов"
+               minlength="8" required>
+      </div>
+
+      <button type="submit" class="btn-primary full-width reg-submit">Зарегистрироваться</button>
+    </form>
+
+    <p class="auth-footer">
+      Уже есть аккаунт? <label for="p-login" class="link">Войти</label>
+    </p>
+  </div>
+</section>
+
+  <section class="screen s-home">
+    <div class="container">
+      <h2>Добро пожаловать, {{ user_name if user_name else 'Гость' }}</h2>
+      <p class="page-title">Главная</p>
+
+      <div class="hero">
+        <h3>Всё важное под рукой</h3>
+        <p>Запишитесь к врачу или проверьте назначения</p>
+        <a href="/book" class="btn-primary">+ Записаться к врачу</a>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <p class="label">Ближайшая запись</p>
+          {% if next_record %}
+            <h4>{{ next_record.date_short }}, {{ next_record.time }}</h4>
+            <p>{{ next_record.specialty|capitalize }}{% if next_record.office %} — каб. {{ next_record.office }}{% endif %}</p>
+          {% else %}
+            <h4>Нет записей</h4>
+            <p>Запишитесь к врачу</p>
+          {% endif %}
+        </div>
+
+        <label for="p-refs" class="card card-link">
+          <p class="label">Направления</p>
+          {% if directions %}
+            <h4>Активных: {{ directions|length }}</h4>
+            <p>{{ directions[0].text|capitalize }}</p>
+          {% else %}
+            <h4>Нет направлений</h4>
+            <p>&nbsp;</p>
+          {% endif %}
+        </label>
+
+        <label for="p-card" class="card card-link">
+          <p class="label">Последний визит</p>
+          {% if last_visit %}
+            <h4>{{ last_visit.date_short }}</h4>
+            <p>{{ last_visit.specialty|capitalize }}</p>
+          {% else %}
+            <h4>Визитов не было</h4>
+            <p>&nbsp;</p>
+          {% endif %}
+        </label>
+      </div>
+
+      {% if next_record %}
+      <div class="card mt-20">
+        <p class="label">Ближайшая запись</p>
+        <div class="row">
+          <div>
+            <h4>{{ next_record.specialty|capitalize }} · {{ next_record.doctor_name }}</h4>
+            <p>{{ next_record.center }}{% if next_record.address %}, {{ next_record.address }}{% endif %}{% if next_record.office %} — каб. {{ next_record.office }}{% endif %}</p>
+          </div>
+          <div class="badge">{{ next_record.time }}</div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+
+  <section class="screen s-book">
+    <div class="container">
+      <label for="p-home" class="btn-back">← Назад</label>
+      <h2>Онлайн-запись</h2>
+      <p class="page-title">Выберите врача</p>
+
+      <div class="filters">
+        <a href="/book" class="filter {% if not selected_specialty %}active{% endif %}">Все</a>
+        {% for spec in specialties %}
+          <a href="{{ url_for('book_doctors', specialty=spec) }}" class="filter {% if selected_specialty == spec %}active{% endif %}">
+            {{ spec|capitalize }}
+          </a>
+        {% endfor %}
+      </div>
+
+      <div class="mt-20">
+        {% if doctors %}
+          {% for doc in doctors %}
+          <a href="/book_time/{{ doc.doc_id }}" class="card card-link mt-10 row" style="text-decoration: none; color: inherit;">
+            <div>
+              <h4>{{ doc.last_name }} {{ doc.first_name }} {{ doc.middle_name or '' }}</h4>
+              <p>{{ (doc.specialties or '')|capitalize }}</p>
+              <p class="doctor">{{ doc.center_name or 'Поликлиника' }}{% if doc.street %}, {{ doc.street }}{% if doc.house %}, {{ doc.house }}{% endif %}{% endif %}</p>
+            </div>
+            <div class="badge">Выбрать</div>
+          </a>
+          {% endfor %}
+        {% else %}
+          <p style="color: #888; margin-top: 20px;">Врачи не найдены.</p>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+
+  <section class="screen s-book-time">
+    <div class="container">
+      {% if doctor %}
+      <a href="{{ url_for('book_doctors', specialty=doctor.specialties) }}" class="btn-back" style="text-decoration: none;">← Назад к выбору врача</a>
+      <h2>Онлайн-запись</h2>
+      <p class="page-title">Выберите день и время</p>
+
+      <div class="card mt-20">
+        <h4>{{ (doctor.specialties or '')|capitalize }} · {{ doctor.last_name }} {{ doctor.first_name }} {{ doctor.middle_name or '' }}</h4>
+        <p>{{ doctor.center_name or 'Поликлиника' }}{% if doctor_address %}, {{ doctor_address }}{% endif %}</p>
+      </div>
+
+      {% if dates %}
+        <h3 class="mt-30">Дни</h3>
+        <div class="filters mt-10">
+          {% for d in dates %}
+            <a href="{{ url_for('book_time', doc_id=doctor.doc_id, date=d.value) }}"
+               class="filter {% if d.value == selected_date %}active{% endif %}">{{ d.label }}</a>
+          {% endfor %}
+        </div>
+
+        <h3 class="mt-30">Время — нажмите, чтобы записаться</h3>
+        <div class="filters mt-10">
+          {% for s in slots %}
+            <form action="/book_confirm" method="POST">
+              <input type="hidden" name="doc_id" value="{{ doctor.doc_id }}">
+              <input type="hidden" name="date" value="{{ s.date }}">
+              <input type="hidden" name="time" value="{{ s.time }}">
+              <input type="hidden" name="specialty" value="{{ doctor.specialties or '' }}">
+              <button type="submit" title="Кабинет {{ s.office }}">{{ s.label }}</button>
+            </form>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p style="color: #888; margin-top: 30px;">У этого врача пока нет свободных окон.</p>
+      {% endif %}
+      {% endif %}
+    </div>
+  </section>
+
+
+  <section class="screen s-book-done">
+    <div class="container">
+      <div class="login-box">
+        <h1>Вы записаны</h1>
+        {% if booking %}
+          <p class="sub">{{ booking.specialty|capitalize }} · {{ booking.doctor_name }}</p>
+          <p><strong>{{ booking.date_label }}, {{ booking.time }}</strong></p>
+          <p class="sub">{{ booking.center }}{% if booking.address %}, {{ booking.address }}{% endif %}{% if booking.office %} — каб. {{ booking.office }}{% endif %}</p>
+        {% else %}
+          <p class="sub">Спасибо, что выбрали наш сервис</p>
+        {% endif %}
+        <a href="/patient_dashboard" class="btn-primary full-width mt-30">На главную</a>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="screen s-card">
+    <div class="container">
+      <h2 class="page-title">Медицинская карта</h2>
+
+      {% if med_data is defined %}
+      <div class="card mt-20">
+        <div class="row">
+          <div>
+            <div class="label">Дата рождения</div>
+            <div><strong>{{ med_data.birth_date }}</strong></div>
+          </div>
+          <div>
+            <div class="label">Пол</div>
+            <div><strong>{{ med_data.gender }}</strong></div>
+          </div>
+          <div>
+            <div class="label">Полис ОМС</div>
+            <div><strong>{{ med_data.oms_policy }}</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="mt-30">История посещений</h3>
+
+      {% if med_data.appointments %}
+        {% for appt in med_data.appointments %}
+        <div class="card mt-10">
+          {% if appt.time_appointment %}
+            <div class="date">{{ appt.time_appointment }}</div>
+          {% endif %}
+          <div class="diag">{{ appt.complaints or 'Жалобы не указаны' }}</div>
+          <div class="note"><strong>Лечение:</strong> {{ appt.medication or 'Не назначено' }}</div>
+          <div class="note"><strong>Направления:</strong> {{ appt.directions or 'Нет' }}</div>
+          <div class="note"><strong>Рекомендации:</strong> {{ appt.recommendations or 'Нет' }}</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="card mt-10">
+          <p style="color: #888;">История посещений пока пуста.</p>
+        </div>
+      {% endif %}
+      {% else %}
+      <div class="card mt-20">
+        <p style="color: #888;">Данные медкарты не загружены.</p>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="screen s-refs">
+    <div class="container">
+      <h2>Добро пожаловать, {{ user_name if user_name else 'Гость' }}</h2>
+      <p class="page-title">Мои направления</p>
+
+      {% for ref in directions %}
+      <div class="card row mt-20">
+        <div>
+          <span class="badge-green">Активно</span>
+          <h4 class="mt-10">{{ ref.text|capitalize }}</h4>
+        </div>
+        <a href="{{ url_for('book_doctors', specialty=ref.specialty) }}" class="btn-primary">Записаться</a>
+      </div>
+      {% else %}
+      <div class="card mt-20">
+        <p style="color: #888;">Активных направлений нет.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="screen s-recepts">
+    <div class="container">
+      <h2>Добро пожаловать, {{ user_name if user_name else 'Гость' }}</h2>
+      <p class="page-title">Мои рецепты</p>
+
+      {% for rx in prescriptions %}
+      <div class="card mt-20">
+        <span class="badge-green">Назначено</span>
+        <h4 class="mt-10">{{ rx|capitalize }}</h4>
+      </div>
+      {% else %}
+      <div class="card mt-20">
+        <p style="color: #888;">Рецептов пока нет.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="screen s-doc">
+    <div class="container">
+      <h2>Добро пожаловать, {{ user_name if user_name else 'Врач' }}</h2>
+      <p class="page-title">Мои приёмы</p>
+
+      {% if done == 'closed' %}<div class="notice show">Приём завершён.</div>{% endif %}
+      {% if done == 'locked' %}<div class="notice show">Этот приём уже завершён, изменения недоступны.</div>{% endif %}
+
+      <div class="grid-3">
+        <div class="card">
+          <p class="label">Всего записей</p>
+          <h4>{{ doc_total }}</h4>
+          <p>{{ doc_finished }} уже завершено</p>
+        </div>
+        <div class="card">
+          <p class="label">Следующий пациент</p>
+          {% if next_patient %}
+            <h4>{{ next_patient.name }}</h4>
+            <p>Приём: {{ next_patient.when }}</p>
+          {% else %}
+            <h4>Нет записей</h4>
+            <p>&nbsp;</p>
+          {% endif %}
+        </div>
+        <div class="card">
+          <p class="label">Свободных окон</p>
+          <h4>{{ free_count }}</h4>
+          <p>{% if nearest_slot %}Ближайшее: {{ nearest_slot }}{% else %}&nbsp;{% endif %}</p>
+        </div>
+      </div>
+
+      <h3 class="mt-30">Записанные пациенты</h3>
+      {% for rec in doc_records %}
+      <div class="card row mt-10">
+        <div>
+          <h4>{{ rec.name }}</h4>
+          <p>{% if rec.age %}{{ rec.age }} — {% endif %}{{ rec.when }}{% if rec.office %} · каб. {{ rec.office }}{% endif %}</p>
+        </div>
+        {% if rec.status == 'completed' %}
+          <div>
+            <span class="badge-green">Завершён</span>
+            <a href="/doctor/patient/{{ rec.pat_id }}?record={{ rec.record_id }}" class="btn-outline" style="margin-left: 10px;">Открыть</a>
+          </div>
+        {% else %}
+          <a href="/doctor/patient/{{ rec.pat_id }}?record={{ rec.record_id }}" class="btn-primary">Принять</a>
+        {% endif %}
+      </div>
+      {% else %}
+      <div class="card mt-10">
+        <p style="color: #888;">Записей пока нет.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="screen s-doc-patient">
+    <div class="container">
+      {% if patient %}
+      <a href="/doctor_dashboard" class="btn-back" style="text-decoration: none;">← Назад к приёмам</a>
+      <h2>{{ patient.last_name }} {{ patient.first_name }} {{ patient.middle_name or '' }}</h2>
+      <p class="page-title">Медицинская карта пациента</p>
+      {% if read_only %}<p class="mt-10"><span class="badge-green">Приём завершён</span></p>{% endif %}
+
+      <div class="grid-3">
+        <div class="card"><p class="label">Возраст</p><h4>{{ patient_age or 'Не указан' }}</h4></div>
+        <div class="card"><p class="label">Полис ОМС</p><h4>{{ pat_med.oms_policy }}</h4></div>
+        <div class="card"><p class="label">Телефон</p><h4>{{ pat_med.phone }}</h4></div>
+      </div>
+
+      <h3 class="mt-30">Запись о приёме</h3>
+      <div class="card mt-10">
+        <form action="/doctor/patient/{{ patient.pat_id }}/save" method="POST">
+          <input type="hidden" name="record_id" value="{{ rec.record_id }}">
+          <div class="form-group mt-10">
+            <label>Жалобы</label>
+            <textarea class="edit-field" name="complaints" rows="2" {% if read_only %}readonly{% endif %}>{{ appt.complaints if appt and appt.complaints else '' }}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Рекомендации</label>
+            <textarea class="edit-field" name="recommendations" rows="2" {% if read_only %}readonly{% endif %}>{{ appt.recommendations if appt and appt.recommendations else '' }}</textarea>
+          </div>
+
+          <p class="note"><strong>Назначенные препараты:</strong> {{ appt.medication if appt and appt.medication else 'нет' }}</p>
+          <p class="note"><strong>Выданные направления:</strong> {{ appt.directions if appt and appt.directions else 'нет' }}</p>
+
+          {% if not read_only %}
+          <div class="actions mt-10">
+            <button type="submit" class="btn-outline">Сохранить изменения</button>
+            <button type="submit" formaction="/doctor/patient/{{ patient.pat_id }}/close" class="btn-primary"
+                    onclick="return confirm('Завершить приём? После этого записи станут недоступны для редактирования.');">Завершить приём</button>
+          </div>
+          {% endif %}
+          <div class="notice notice-save {% if done == 'save' %}show{% endif %}">Изменения сохранены.</div>
+        </form>
+      </div>
+
+      {% if not read_only %}
+
+      <h3 class="mt-30">Выдать направление</h3>
+      <div class="card mt-10">
+        <form action="/doctor/patient/{{ patient.pat_id }}/direction" method="POST">
+          <input type="hidden" name="record_id" value="{{ rec.record_id }}">
+          <div class="form-group">
+            <label>Выберите направление</label>
+            <select class="edit-field" name="direction" required>
+              {% for d in direction_catalog %}
+                <option value="{{ d }}">{{ d|capitalize }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn-outline mt-10">Выдать направление</button>
+          <div class="notice notice-ref {% if done == 'direction' %}show{% endif %}">Направление выдано.</div>
+        </form>
+      </div>
+
+
+      <h3 class="mt-30">Выписать рецепт</h3>
+      <div class="card mt-10">
+        <form action="/doctor/patient/{{ patient.pat_id }}/prescription" method="POST">
+          <input type="hidden" name="record_id" value="{{ rec.record_id }}">
+          <div class="form-group">
+            <label>Название препарата и дозировка</label>
+            <input type="text" class="edit-field" name="drug" placeholder="Например: Парацетамол 500 мг" required>
+          </div>
+          <div class="form-group">
+            <label>Способ приёма</label>
+            <textarea class="edit-field" name="usage" rows="2" placeholder="Например: по 1 таблетке 2 раза в день, 5 дней"></textarea>
+          </div>
+          <button type="submit" class="btn-outline mt-10">Выписать рецепт</button>
+          <div class="notice notice-recept {% if done == 'prescription' %}show{% endif %}">Рецепт выписан.</div>
+        </form>
+      </div>
+
+      {% endif %}
+      {% endif %}
+    </div>
+  </section>
+
+</body>
+</html>
